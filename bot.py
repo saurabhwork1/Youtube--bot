@@ -1,5 +1,4 @@
 import os
-import asyncio
 from dotenv import load_dotenv
 
 from telegram import Update
@@ -17,18 +16,18 @@ TOKEN = os.getenv("BOT_TOKEN")
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("🔥 Bot Started")
+
+
+async def message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "Bot started ✅"
+        "Link received ✅"
     )
 
 
-async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "Received: " + update.message.text
-    )
+def main():
 
-
-async def main():
+    print("BOT STARTED")
 
     app = Application.builder().token(TOKEN).build()
 
@@ -37,13 +36,14 @@ async def main():
     )
 
     app.add_handler(
-        MessageHandler(filters.TEXT, handle_message)
+        MessageHandler(
+            filters.TEXT,
+            message
+        )
     )
 
-    print("BOT STARTED")
-
-    await app.run_polling()
+    app.run_polling()
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
